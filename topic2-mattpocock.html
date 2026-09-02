@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MattPocock Skills 选型与安装</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f7f7f5;
+  --bg-sidebar: #fbfbfa;
+  --text: #37352f;
+  --text-soft: #6b6963;
+  --text-muted: #9b9a93;
+  --accent: #2383e2;
+  --accent-soft: #e8f1fd;
+  --border: #ebebea;
+  --code-bg: #f6f5f4;
+  --highlight: #fff8d9;
+  --green: #4caf50;
+  --orange: #f59e0b;
+  --red: #ef4444;
+  --sidebar-w: 260px;
+}
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* === Layout === */
+.top-bar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 14px;
+}
+.top-bar .left { display: flex; align-items: center; gap: 12px; }
+.top-bar .home-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--text-soft); padding: 4px 10px; border-radius: 6px;
+  background: var(--bg-soft);
+}
+.top-bar .home-link:hover { background: var(--accent-soft); color: var(--accent); text-decoration: none; }
+.top-bar .breadcrumb { color: var(--text-muted); font-size: 13px; }
+.top-bar .topic-tag {
+  background: var(--accent); color: #fff; padding: 3px 10px;
+  border-radius: 999px; font-size: 12px; font-weight: 600;
+}
+
+/* === Sidebar === */
+.sidebar {
+  position: fixed;
+  top: 56px; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+.sidebar h4 {
+  font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600; margin-bottom: 8px; padding-left: 10px;
+}
+.sidebar nav a {
+  display: block;
+  color: var(--text);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 13.5px;
+  border-left: 2px solid transparent;
+}
+.sidebar nav a:hover { background: var(--bg-soft); color: var(--accent); text-decoration: none; }
+.sidebar nav a.lvl-2 { padding-left: 22px; font-size: 13px; color: var(--text-soft); }
+.sidebar nav a.lvl-3 { padding-left: 34px; font-size: 12.5px; color: var(--text-muted); }
+
+/* === Main content === */
+.main {
+  margin-left: var(--sidebar-w);
+  padding: 0 32px;
+}
+.content {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 48px 0 120px;
+}
+.hero {
+  margin-bottom: 56px; padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.hero .eyebrow {
+  font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase;
+  color: var(--accent); font-weight: 600; margin-bottom: 8px;
+}
+.hero h1 {
+  font-size: 40px; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em;
+  margin-bottom: 12px; color: var(--text);
+}
+.hero .subtitle { font-size: 18px; color: var(--text-soft); line-height: 1.6; }
+.hero .meta {
+  margin-top: 14px; display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px;
+  color: var(--text-muted);
+}
+.hero .meta span { display: inline-flex; align-items: center; gap: 4px; }
+
+/* === Reading Guide / 导读 === */
+.guide-card {
+  background: linear-gradient(180deg, #f8f9fb 0%, #fbfcfd 100%);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px 36px;
+  margin-bottom: 56px;
+}
+.guide-card .guide-eyebrow {
+  font-size: 12px; letter-spacing: 0.6px; text-transform: uppercase;
+  color: var(--accent); font-weight: 700; margin-bottom: 6px;
+}
+.guide-card h2 {
+  font-size: 24px; font-weight: 700; margin-bottom: 16px; color: var(--text);
+}
+.guide-card .lead {
+  font-size: 16px; color: var(--text); line-height: 1.8; margin-bottom: 20px;
+}
+.guide-card .conclusions-title {
+  font-size: 14px; font-weight: 700; margin: 24px 0 12px;
+  color: var(--text); border-top: 1px solid var(--border); padding-top: 20px;
+}
+.guide-card ol { padding-left: 22px; }
+.guide-card ol li { margin-bottom: 8px; line-height: 1.7; }
+.guide-card .read-path {
+  margin-top: 20px; padding: 16px 18px;
+  background: #fff; border-left: 3px solid var(--accent);
+  border-radius: 6px; font-size: 14px; color: var(--text-soft);
+}
+.guide-card .read-path strong { color: var(--text); }
+
+/* === Headings === */
+h2.section {
+  font-size: 30px; font-weight: 700; letter-spacing: -0.01em;
+  margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--border);
+  color: var(--text);
+}
+h2.section:first-of-type { border-top: none; padding-top: 0; }
+h3.subsection { font-size: 22px; font-weight: 600; margin: 36px 0 12px; color: var(--text); }
+h4.subsubsection { font-size: 17px; font-weight: 600; margin: 24px 0 10px; color: var(--text); }
+h5 { font-size: 15px; font-weight: 600; margin: 18px 0 8px; color: var(--text); }
+
+p { margin: 12px 0; }
+ul, ol { margin: 12px 0; padding-left: 24px; }
+li { margin: 6px 0; }
+
+/* === Callouts === */
+.callout {
+  margin: 20px 0; padding: 14px 18px;
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  font-size: 14.5px;
+  color: var(--text);
+}
+.callout.warn { background: #fffbeb; border-left-color: var(--orange); }
+.callout.danger { background: #fef2f2; border-left-color: var(--red); }
+.callout.success { background: #f0fdf4; border-left-color: var(--green); }
+.callout .icon { font-weight: 700; margin-right: 6px; }
+
+/* === Code === */
+pre {
+  background: var(--code-bg); padding: 14px 18px; border-radius: 8px;
+  overflow-x: auto; font-size: 13.5px; line-height: 1.6;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", "Sarasa Mono SC", Menlo, monospace;
+  margin: 16px 0;
+  border: 1px solid var(--border);
+}
+code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", "Sarasa Mono SC", Menlo, monospace;
+  font-size: 0.88em; background: var(--code-bg);
+  padding: 2px 6px; border-radius: 4px;
+  color: #c7254e;
+}
+pre code { background: transparent; padding: 0; color: var(--text); }
+
+/* === Table === */
+.table-wrap { overflow-x: auto; margin: 18px 0; }
+table {
+  border-collapse: collapse; width: 100%; font-size: 14px;
+  border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+}
+th, td {
+  padding: 10px 14px; text-align: left;
+  border-bottom: 1px solid var(--border); border-right: 1px solid var(--border);
+  vertical-align: top;
+}
+th:last-child, td:last-child { border-right: none; }
+tr:last-child td { border-bottom: none; }
+thead th {
+  background: var(--bg-soft); font-weight: 600; color: var(--text);
+  font-size: 13.5px;
+}
+tbody tr:nth-child(even) { background: var(--bg-soft); }
+
+/* === Blockquote === */
+blockquote {
+  margin: 18px 0; padding: 12px 18px;
+  border-left: 3px solid var(--text-muted);
+  color: var(--text-soft); font-style: normal;
+  background: var(--bg-soft);
+  border-radius: 0 6px 6px 0;
+}
+blockquote p { margin: 6px 0; }
+
+/* === Misc === */
+.divider { height: 1px; background: var(--border); margin: 40px 0; }
+strong { font-weight: 700; color: var(--text); }
+em { font-style: italic; }
+
+/* === Source File Card === */
+.source-card {
+  margin: 36px 0; padding: 16px 20px;
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.source-card .src-name {
+  font-size: 12px; letter-spacing: 0.4px; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600; margin-bottom: 4px;
+}
+.source-card .src-title {
+  font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 6px;
+}
+.source-card .src-meta {
+  font-size: 12px; color: var(--text-muted); margin-bottom: 12px;
+}
+
+/* === Summary Section === */
+.summary-card {
+  margin-top: 64px; padding: 32px 36px;
+  background: linear-gradient(135deg, #fafbfd 0%, #f3f6fb 100%);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.summary-card h2 { font-size: 26px; margin-bottom: 16px; color: var(--text); }
+.summary-card .item {
+  margin: 10px 0; padding-left: 24px; position: relative; line-height: 1.75;
+}
+.summary-card .item:before {
+  content: "✓"; position: absolute; left: 0; top: 0;
+  color: var(--green); font-weight: 700;
+}
+
+/* === Back to Top === */
+.back-top {
+  position: fixed; right: 28px; bottom: 28px;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--text); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; cursor: pointer;
+  opacity: 0; transition: opacity 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.back-top.show { opacity: 0.8; }
+.back-top:hover { opacity: 1; }
+
+/* === Mobile === */
+@media (max-width: 1024px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 0 20px; }
+  .content { padding: 32px 0 80px; }
+  .hero h1 { font-size: 32px; }
+}
+
+/* === Index Page === */
+.index-page { padding: 60px 24px 100px; max-width: 1100px; margin: 0 auto; }
+.index-header { text-align: center; margin-bottom: 64px; }
+.index-header h1 { font-size: 44px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.02em; }
+.index-header .sub { font-size: 18px; color: var(--text-soft); max-width: 640px; margin: 0 auto; line-height: 1.7; }
+.index-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+.index-card {
+  display: block; padding: 28px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 12px; transition: all 0.18s;
+  color: var(--text);
+}
+.index-card:hover {
+  transform: translateY(-3px); border-color: var(--accent);
+  box-shadow: 0 12px 32px rgba(35,131,226,0.10);
+  text-decoration: none;
+}
+.index-card .num {
+  display: inline-block; width: 32px; height: 32px;
+  background: var(--accent); color: #fff;
+  border-radius: 8px; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 14px; margin-bottom: 12px;
+}
+.index-card .t { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.index-card .d { font-size: 14px; color: var(--text-soft); line-height: 1.6; }
+.index-card .meta { font-size: 12px; color: var(--text-muted); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+.footer-note {
+  margin-top: 60px; padding: 24px; text-align: center;
+  background: var(--bg-soft); border-radius: 10px;
+  font-size: 13px; color: var(--text-soft);
+}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="left">
+    <a href="index.html" class="home-link">← 总目录</a>
+    <span class="breadcrumb">MattPocock Skills 选型与安装</span>
+  </div>
+  <div><span class="topic-tag">课题 2</span></div>
+</div>
+<a id="top"></a>
+<div class="sidebar">
+<h4>目录导航</h4>
+<nav>
+<a href="#top">↑ MattPocock Skills · 顶部</a>
+<a href="#part-1" class="">第 1 部分 · Skills 分析（原始版）</a>
+<a href="#part-2" class="">第 2 部分 · 中文版分析报告</a>
+<a href="#part-3" class="">第 3 部分 · 选型与安装指南</a>
+<a href="#part-4" class="">第 4 部分 · 29 个 Skills 分层与已装</a>
+<div style="margin-top:16px;border-top:1px solid var(--border);padding-top:12px;">
+<a href="index.html">← 返回总目录</a>
+</div>
+</nav></div>
+<div class="main">
+  <div class="content">
+<div class="hero">
+<div class="eyebrow">课题 2 / 5</div>
+<h1>MattPocock Skills 选型与安装</h1>
+<div class="subtitle">MattPocock 公开的 29 个分层 Skills（AI 提示词技能包）的中文版分析、选型原则、安装配置与已装状态对照。</div>
+<div class="meta">
+  <span>📚 4 份源文件</span>
+  <span>🛠 29 个 Skills</span>
+  <span>🏷 中文版分析</span>
+</div>
+</div>
+<div class="guide-card">
+<div class="guide-eyebrow">导读 · 速读路径</div>
+<h2>什么是 MattPocock Skills？我该怎么用？</h2>
+<div class="lead">
+MattPocock Skills 是 TypeScript 专家 Matt Pocock 在 GitHub 上公开维护的一组「AI 提示词技能包」，按使用频率与重要度分为三个层级，共 29 个 Skills，可直接安装到 Trae / Cursor / Claude Code 等支持 Skill 协议的 AI IDE 中。本课题汇集了对这套 Skills 的中文版分析报告、选型指南与已装状态对照表。
+</div>
+
+<div class="conclusions-title">核心结论（共 6 条）</div>
+<ol>
+<li><strong>三层分级</strong>：29 个 Skills 按「必备 → 推荐 → 可选」三层组织，必备层覆盖大部分日常工作流。</li>
+<li><strong>每个 Skill 是一段 YAML 描述的提示词模板</strong>：定义了触发条件、提示词内容与期望输出格式，不是代码包。</li>
+<li><strong>兼容主流 AI IDE</strong>：Trae、Cursor、Claude Code、Cline、Continue 等支持 MCP/Skill 协议的 IDE 都能装。</li>
+<li><strong>选型原则</strong>：先装必备层（覆盖 80% 场景），再按个人工作流需求选推荐/可选层；不要一次性全装。</li>
+<li><strong>安装方式</strong>：从官方仓库 clone 或下载 SKILL.md 文件放入 IDE 的 skill 目录即可生效。</li>
+<li><strong>已装状态对照</strong>：用户文档显示已装了部分 Skills（详见对照表），未装部分主要是低频场景的辅助技能。</li>
+</ol>
+
+<div class="read-path"><strong>📖 推荐阅读路径（5–10 分钟）：</strong>本导读 → 第 1 章 29 个 Skills 分层速览 → 第 2 章 选型与安装指南 → 第 3 章 已装状态对照。</div>
+</div>
+<h2 class="section" id="part-1">第 1 部分 · MattPocock Skills 分析报告（原始版）</h2>
+<p style="color: var(--text-muted); font-size: 14px;">源文件：<code>mattpocock-skills-分析.md</code></p>
+<h2 class="section">Matt Pocock Skills 中文版 · 深度分析</h2>
+<p>仓库：<code>https://github.com/vinvcn/mattpocock-skills-zh-CN</code>（<code>mattpocock/skills</code> 的简体中文化版，MIT）<br>
+分析时间：2026-08-30 · 结合你的 455 条真实提问 + 本地已装 skill 核对</p>
+<hr>
+<h3 class="subsection">零、先给结论</h3>
+<ol>
+<li><strong>对不会编程的用户：29 个里有 13 个真的能用，16 个明确用不了。</strong> 不是"大部分没用"，也不是"都能用"——它是一套给程序员的工程纪律库，但<strong>追问（grilling）和领域建模（domain modeling）这两块核心思想是通用的</strong>，恰好是你最需要的那部分。</li>
+<li><strong>你已经是这套东西的重度用户</strong>——<code>grill-me</code> 在 455 条提问里被你调用了 <strong>131 次</strong>，占 29%。你不是"要不要用"的问题，而是"用得对不对"。</li>
+<li><strong>你现在有一个真实的接线错误</strong>：新的 <code>grilling</code> 引擎装了，但调用它的 <code>grill-me</code> 入口还是 6 月的旧英文版，<strong>131 次调用一次都没走到新引擎上</strong>。这是本次分析最值得立刻修的一件事（见第五节）。</li>
+</ol>
+<hr>
+<h3 class="subsection">一、这套东西到底是什么</h3>
+<p>先纠正一个常见误解：<strong>它不是提示词模板集合，是给 AI 定的工作流程纪律（SOP）</strong>。</p>
+<p>作者 Matt Pocock（TypeScript 教育者）在 README 里明确说了他做这套东西要解决的四个失败模式，以及他<strong>反对</strong>什么：</p>
+<table>
+<thead>
+<tr>
+<th>失败模式</th>
+<th>他的诊断</th>
+<th>对应解法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agent 没做我想要的东西</td>
+<td>你和 agent 之间有沟通缺口</td>
+<td><strong>grilling</strong>（开始干活前先被追问）</td>
+</tr>
+<tr>
+<td>Agent 太啰嗦</td>
+<td>你和 agent 没有统一词汇</td>
+<td><strong>shared language / CONTEXT.md</strong></td>
+</tr>
+<tr>
+<td>代码跑不起来</td>
+<td>没有反馈回路，agent 在盲飞</td>
+<td><strong>tdd</strong>（红-绿-重构）</td>
+</tr>
+<tr>
+<td>做成了泥球</td>
+<td>只关心"做出来"，不关心设计</td>
+<td><strong>deep modules</strong> 系列</td>
+</tr>
+</tbody>
+</table>
+<p>他特意点名反对 GSD、BMAD、Spec-Kit 这类方法：<strong>"它们在接管流程的同时，也拿走了你的控制权"</strong>。他的主张是 skills 要小、能改、能组合，你可以 hack 成自己的。</p>
+<h4 class="subsubsection">两类 skill，区别很重要</h4>
+<ul>
+<li><strong>User-invoked</strong>（你输入 <code>/名字</code> 才触发）：负责<strong>编排</strong></li>
+<li><strong>Model-invoked</strong>（agent 判断任务匹配时自动触发）：负责<strong>纪律</strong></li>
+</ul>
+<p>前者可以调后者，但前者不能调前者。所以 <code>grill-me</code> 只是个两行入口，真正干活的是引擎 <code>grilling</code>——这个结构对你后面理解"为什么你的 grill-me 没生效"很关键。</p>
+<hr>
+<h3 class="subsection">二、全 29 个逐个判定</h3>
+<h4 class="subsubsection">A 类：领域无关，不写代码也能直接用（13 个）</h4>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>干什么</th>
+<th>对你的价值</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grill-me</code></td>
+<td>追问入口</td>
+<td>★★★ 你的主力工具</td>
+<td>已装（<strong>但是旧版</strong>）</td>
+</tr>
+<tr>
+<td><code>grilling</code></td>
+<td>追问引擎：design tree + 分轮 + frontier</td>
+<td>★★★ 核心</td>
+<td>已装（被改动过）</td>
+</tr>
+<tr>
+<td><code>research</code></td>
+<td>后台 agent 对照<strong>一手来源</strong>调研，每个论断带出处，存 Markdown</td>
+<td>★★★ 你做 DeepSeek 选型、mod 机制考证</td>
+<td>已装</td>
+</tr>
+<tr>
+<td><code>handoff</code></td>
+<td>把长对话压成交接文档给新窗口</td>
+<td>★★★ 你的会话经常中断</td>
+<td>已装</td>
+</tr>
+<tr>
+<td><code>wait-what</code></td>
+<td>AI 没说人话时，让它用你的词汇重讲</td>
+<td>★★ 你明说过"我没有代码基础"</td>
+<td>已装</td>
+</tr>
+<tr>
+<td><code>writing-for-agents</code></td>
+<td>教 AI 怎么写 skill 文档</td>
+<td>★★★ 你 <code>skill-builder</code> 用了 14 次</td>
+<td>已装</td>
+</tr>
+<tr>
+<td><strong><code>domain-modeling</code></strong></td>
+<td>建立 <strong>CONTEXT.md 术语表</strong> + ADR 决策记录</td>
+<td>★★★ <strong>最被低估的一个</strong></td>
+<td>❌ 未装</td>
+</tr>
+<tr>
+<td><strong><code>grill-with-docs</code></strong></td>
+<td>= grilling + domain-modeling 的组合入口</td>
+<td>★★★ 边追问边沉淀术语</td>
+<td>❌ 未装</td>
+</tr>
+<tr>
+<td><strong><code>teach</code></strong></td>
+<td>跨 session 的状态化教学，会建 MISSION.md、学习档案、可打印 HTML 课件</td>
+<td>★★★ 为"不会编程但要懂 mod 结构"而生</td>
+<td>❌ 未装</td>
+</tr>
+<tr>
+<td><strong><code>wayfinder</code></strong></td>
+<td>把装不进单个 session 的大项目，画成 GitHub Issues 上的"地图"，每次只解决一个决策票</td>
+<td>★★★ 你有 文明6 1~20 + 英雄无敌X</td>
+<td>❌ 未装</td>
+</tr>
+<tr>
+<td><strong><code>prototype</code></strong></td>
+<td>用<strong>一个可分享的 HTML 文件</strong>回答"长什么样/怎么表现"</td>
+<td>★★ 你做图标和 UI 方案</td>
+<td>❌ 未装</td>
+</tr>
+<tr>
+<td><strong><code>to-questionnaire</code></strong></td>
+<td>把你自己答不了的决定，做成一份问卷发给能答的人</td>
+<td>★★ 问 mod 作者、问同好</td>
+<td>❌ 未装</td>
+</tr>
+<tr>
+<td><strong><code>ask-matt</code></strong></td>
+<td>路由器：问它"这个情况该用哪个 skill"</td>
+<td>★★ skill 装多了以后有用</td>
+<td>❌ 未装</td>
+</tr>
+</tbody>
+</table>
+<h4 class="subsubsection">B 类：有 GitHub 能用，但偏重/需要取舍（6 个）</h4>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>说明</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>to-spec</code></td>
+<td>把讨论整理成 spec 发到 issue tracker</td>
+<td>装了 wayfinder 再说</td>
+</tr>
+<tr>
+<td><code>to-tickets</code></td>
+<td>把 plan 拆成<strong>带依赖关系</strong>的 tickets</td>
+<td>同上，是 wayfinder 的配套</td>
+</tr>
+<tr>
+<td><code>triage</code></td>
+<td>用分诊状态机推进 issues</td>
+<td>你不是团队协作，收益有限</td>
+</tr>
+<tr>
+<td><code>setup-matt-pocock-skills</code></td>
+<td>一次性配置 issue tracker / labels</td>
+<td>要用上面三个就<strong>必须</strong>先装这个</td>
+</tr>
+<tr>
+<td><code>wizard</code></td>
+<td>生成交互式 bash 向导，带人走只能人做的步骤（注册、配密钥、陌生后台）</td>
+<td>有价值，但产的是 bash 脚本，Windows 要用 Git Bash</td>
+</tr>
+<tr>
+<td><code>diagnosing-bugs</code></td>
+<td>纪律化调试：建反馈环 → 最小化 → 假设 → 插桩 → 修复 → 回归测试</td>
+<td><strong>方法论值得学</strong>，但 skill 本身假设有测试框架；你调试 mod 建议只借鉴思路</td>
+</tr>
+</tbody>
+</table>
+<h4 class="subsubsection">C 类：明确用不了，别浪费时间（16 个）</h4>
+<p><code>tdd</code>、<code>code-review</code>、<code>implement</code>、<code>codebase-design</code>、<code>improve-codebase-architecture</code>、<code>resolving-merge-conflicts</code>、<code>git-guardrails-claude-code</code>、<code>migrate-to-shoehorn</code>、<code>scaffold-exercises</code>、<code>setup-pre-commit</code>，以及 <code>in-progress/</code> 下 6 个半成品（<code>claude-handoff</code>、<code>loop-me</code>、<code>setup-ts-deep-modules</code>、<code>writing-beats</code>、<code>writing-fragments</code>、<code>writing-shape</code>）。</p>
+<p>判断标准很简单：<strong>它们要读你的代码、跑你的测试、动你的 git 仓库</strong>。你在做文明6 的 XML/SQL/Lua 模组、做图标、做汉化——不是代码仓库工作流，这些 skill 触发了也只会让 agent 去找根本不存在的 <code>package.json</code> 和测试文件。</p>
+<blockquote>
+<p>顺带说一句：你 Desktop 上那份《使用说明.md》把这个判断做对了——它挑出的 6 个就是 A 类里最稳的那 6 个。但它把 <code>domain-modeling</code> / <code>grill-with-docs</code> / <code>teach</code> / <code>wayfinder</code> / <code>prototype</code> 一起划到"工程类"里扔掉了，<strong>这是个漏判</strong>。</p>
+</blockquote>
+<hr>
+<h3 class="subsection">三、你的对话画像（455 条真实提问）</h3>
+<h4 class="subsubsection">数据</h4>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工作区</td>
+<td>25 个（23 个有提问）</td>
+</tr>
+<tr>
+<td>用户提问</td>
+<td>455 条</td>
+</tr>
+<tr>
+<td>命令调用总计</td>
+<td>441 次</td>
+</tr>
+<tr>
+<td>会话元信息</td>
+<td>23 个（模型以 <code>DeepSeek-V4-Pro</code> 为主，跨度 08-03 ~ 08-22）</td>
+</tr>
+<tr>
+<td>未发送草稿</td>
+<td>111 条</td>
+</tr>
+</tbody>
+</table>
+<h4 class="subsubsection">命令调用分布</h4>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>次数</th>
+<th>占比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>civ6-mod-expert</code></td>
+<td>222</td>
+<td>50%</td>
+</tr>
+<tr>
+<td><strong><code>grill-me</code></strong></td>
+<td><strong>131</strong></td>
+<td><strong>30%</strong></td>
+</tr>
+<tr>
+<td><code>civ6-game-effect-extractor</code></td>
+<td>68</td>
+<td>15%</td>
+</tr>
+<tr>
+<td><code>skill-builder</code></td>
+<td>14</td>
+<td>3%</td>
+</tr>
+<tr>
+<td>其他（icons / screenshot-qa / pdf-ocr）</td>
+<td>6</td>
+<td>1%</td>
+</tr>
+</tbody>
+</table>
+<h4 class="subsubsection">主题分布（可重复计数）</h4>
+<p>文明6 mod 350 · 环境/工具 97 · 其他 83 · 数据表格 33 · 文档写作 29 · 调研选型 24 · skill/提示词 23</p>
+<h4 class="subsubsection">三个能读出你工作方式的细节</h4>
+<ol>
+<li><strong>你是"先想清楚再动手"型的人。</strong> 30% 的提问是在让 AI 追问你，而不是让它干活。这个习惯非常罕见，也很正确——Matt Pocock 整套方法论的第一条就是这个。</li>
+<li><strong>你的痛点是"术语漂移"，不是"不会做"。</strong> 你的提问里有大量 <code>逐字逐句对比</code>、<code>完整提取语句</code>、<code>列出详细表格</code>、<code>详细分析原理</code>。23 个文明6 工作区、每个都塞满了"科技树/市政树/改良/政策槽/城邦/伟人/尤里卡/鼓舞/时代分"这类黑话——<strong>每次开新会话，AI 都要从头猜一遍这些词</strong>。这正是 README 里"#2 Agent 太啰嗦"那个问题，解法就是 CONTEXT.md。</li>
+<li><strong>你在反复重来。</strong> 提问里能看到 <code>失败，出现bug</code>、<code>运行了一次，完全不按照流程！！！！</code>、<code>还需要修改</code>；Qoder 那边更明显——同一个 DeepSeek V4 选型问题被提交了 4 次，前 3 次都崩了。<strong>缺的不是能力，是跨会话的状态记录。</strong></li>
+</ol>
+<hr>
+<h3 class="subsection">四、哪些你用得上 —— 按优先级排序</h3>
+<h4 class="subsubsection">第 1 优先：把 grill-me 修好（0 成本，立刻生效）</h4>
+<p>见第五节。</p>
+<h4 class="subsubsection">第 2 优先：`domain-modeling` + `grill-with-docs`</h4>
+<p><strong>这是我认为你最该补的一个。</strong></p>
+<p>它会维护一份 <code>CONTEXT.md</code>，长这样（用你的领域举例）：</p>
+<p>```md</p>
+<h2 class="section">文明6 模组改造</h2>
+<h3 class="subsection">Language</h3>
+<p><strong>科技树（Tech Tree）</strong>：<br>
+解锁单位/建筑/改良的线性解锁路径。<br>
+<em>Avoid</em>: 科技、研发树、科技界面</p>
+<p><strong>市政树（Civic Tree）</strong>：<br>
+……<br>
+<em>Avoid</em>: 政策树、社会制度</p>
+<p><strong>尤里卡（Eureka）</strong>：<br>
+……（避免和"鼓舞"混淆）<br>
+```</p>
+<p>效果是什么？作者在 README 里给的例子：</p>
+<ul>
+<li>之前："There's a problem when a lesson inside a section of a course is made 'real'"</li>
+<li>之后："There's a problem with the materialization cascade"</li>
+</ul>
+<p><strong>一句话 vs 二十句话。</strong> 对你这种 23 个工作区、术语高度密集的场景，这份词汇表会在每一次会话里持续回本：AI 不再用二十个词解释一件事，也不会把"尤里卡"和"鼓舞"搞混，命名和文件组织也会更一致。</p>
+<p><code>grill-with-docs</code> 是它的入口：一边追问你，一边把术语和决策写进 <code>CONTEXT.md</code> 和 ADR。你只要继续用 <code>grill-me</code> 的习惯，多说一句 <code>/grill-with-docs</code> 就行。</p>
+<h4 class="subsubsection">第 3 优先：`wayfinder`（你有 GitHub，正好用得上）</h4>
+<p>它解决的是"一个会话装不下的大工程"。你现在的状态就是这个形状：文明6 1 到 20、汉化、英雄无敌X、一堆 skill 工程——每个都是雾里看花，看不到从这到那的路。</p>
+<p>它的做法：<br>
+- 在 GitHub Issues 上建一张<strong>地图</strong>（一个带 <code>wayfinder:map</code> 标签的 issue）<br>
+- 下面挂<strong>决策票</strong>（不是任务票——每张票解决一个"需要决定"的问题）<br>
+- 每次会话<strong>只解决一张票</strong>，把答案写进 resolution comment 然后关掉<br>
+- 地图有个 "Not yet specified" 区，专门放"你感觉以后会来、但现在还说不清"的事</p>
+<p>最关键的一条纪律：<strong>"每个 session 绝不要 resolve 超过一个 ticket"</strong>。这直接治你"用超大提示词一次性砸过去、然后崩掉重来"的模式。</p>
+<p>作者明说这个 map 是<strong>领域无关</strong>的：engineering work、course content，任何符合这个形状的事都行。你做 mod 工程完全适用。</p>
+<h4 class="subsubsection">第 4 优先：`teach`</h4>
+<p>你在一堆提问里说过 <strong>"我没有任何的代码基础，需要你简介"</strong>。<code>teach</code> 就是为这个场景设计的：</p>
+<ul>
+<li>它把当前目录当成一个<strong>持续存在的教室</strong>，跨 session 记住你的进度</li>
+<li><code>MISSION.md</code> 记录你<strong>为什么</strong>要学这个（先问你，不理解动机就不开课）</li>
+<li><code>lessons/0001-xxx.html</code> 是一个个很短、做得很漂亮、可打印的单页课件</li>
+<li><code>learning-records/</code> 记你学到了什么、哪些要回头修</li>
+<li>内置了真实的学习科学：<strong>提取练习、间隔重复、交错练习</strong>，明确区分" fluency（当下能想起来）"和"storage strength（长期记得住）"，目标是后者</li>
+</ul>
+<p>学 Lua 的 event 注册机制、学 modinfo 的结构、学 SQLite——都用这个，比每次从头问强得多。</p>
+<h4 class="subsubsection">第 5 优先：`prototype`</h4>
+<p>回答"这个 UI 到底该长什么样"时，它不写代码进项目，而是产出<strong>一个你可以直接在浏览器打开的单文件 HTML</strong>，或者几个风格迥异的 UI 变体让你挑。你做科技树图标、UI 改版时特别顺手。</p>
+<h4 class="subsubsection">第 6：`to-questionnaire` / `ask-matt`</h4>
+<ul>
+<li>遇到你自己答不了、只有别人能答的决定（比如某个 mod 的原作者为什么这么写），它把问题做成一份问卷，还会追问你"发给谁、你想拿回什么"。</li>
+<li><code>ask-matt</code> 是路由器，等你装到十几个 skill 以后，直接问它"这种情况该用哪个"就行。</li>
+</ul>
+<hr>
+<h3 class="subsection">五、你现在的一个真问题：grill-me 入口没接上新引擎</h3>
+<p>我比对了你本地的三个文件：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>内容</th>
+<th>时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/.trae-cn/skills/grill-me/SKILL.md</code></td>
+<td><strong>旧英文版</strong>：自己内联了整套逻辑，"Ask the questions <strong>one at a time</strong>"</td>
+<td>6-28</td>
+</tr>
+<tr>
+<td><code>~/.trae-cn/skills/grilling/SKILL.md</code></td>
+<td><strong>新版中文引擎</strong>：rounds + frontier</td>
+<td>8-29</td>
+</tr>
+<tr>
+<td><code>Desktop/trae-skills/mattpocock-skills-精选/grill-me/SKILL.md</code></td>
+<td><strong>新版中文入口</strong>：只有两行——"运行一次 <code>/grilling</code> session"</td>
+<td>8-29</td>
+</tr>
+</tbody>
+</table>
+<p><strong>问题</strong>：新版 <code>grilling</code> 装进去了，但 <code>grill-me</code> 入口还是 6 月的旧英文版，它<strong>不会去调 <code>grilling</code></strong>，而是走自己那套旧的"一次问一个"。精选包里那个正确的新入口躺在 Desktop 上，没装进去。</p>
+<p>也就是说：<strong>你那 131 次 grill-me，跑的一直是旧逻辑，新引擎从没被触发过。</strong></p>
+<h4 class="subsubsection">新旧引擎差在哪</h4>
+<p>旧版（<code>grill me V</code>，你现在在跑的）：</p>
+<blockquote>
+<p>"Ask the questions one at a time."</p>
+</blockquote>
+<p>新版（<code>grilling</code>，没跑起来的）：</p>
+<blockquote>
+<p>把决策映射成一棵 <strong>design tree</strong>。按<strong>轮</strong>推进，<strong>frontier</strong> = 前置条件已敲定、现在就能问的那些问题。<strong>一轮里把整条 frontier 全问完</strong>，编号 + 给推荐答案，然后等回答。</p>
+</blockquote>
+<p>还有一条新版独有的硬规矩，价值极高：</p>
+<blockquote>
+<p><strong>寻找 facts 是你的工作，绝不是用户的。</strong> 当问题需要环境里的事实（文件系统、工具能查到的），派 sub-agent 去查——不要问用户任何你自己能查到的东西。</p>
+</blockquote>
+<p>对你这种"分析 20 个 mod 文件夹"的场景，这一条能省掉大量来回。旧版只有一句软的"如果能查代码库就去查"，没有 sub-agent 派单、也没有"别被它阻塞，先问 frontier 其余部分"这种调度。</p>
+<h4 class="subsubsection">另外一个改动，值得你自己决定</h4>
+<p>你（或之前的某次操作）在新版 <code>grilling</code> 第 6 行加了一句：</p>
+<blockquote>
+<p>持续访谈用户…… 使用AskUserQuestion工具进行提问。</p>
+</blockquote>
+<p>这和上游设计有张力。上游的问题格式是纯文本的：</p>
+<pre><code>❓ **Q1** - **&lt;问题标题&gt;**：&lt;问题正文，可能有多段，包括多个选项&gt;
+
+➡️ &lt;你的推荐答案&gt;
+</code></pre>
+<p>而 AskUserQuestion 是<strong>选择题控件</strong>（一次最多 4 个问题、每题 2-4 个预设选项）。走控件的话：一轮问不完 frontier、每个问题都被压缩成预设选项、"➡️ 推荐答案"这种开放式建议也没地方放。</p>
+<p><strong>两种各有好坏</strong>：选择题对不用打字的人更省力，但会丢掉开放式的推荐答案和"一轮问完整条 frontier"的并行效率。建议你两种都试一次再定，别默认就用控件。</p>
+<hr>
+<h3 class="subsection">六、落地步骤</h3>
+<h4 class="subsubsection">立刻做（5 分钟）</h4>
+<ol>
+<li>打开 <code>C:\Users\A\Desktop\trae-skills\mattpocock-skills-精选\grill-me\SKILL.md</code>，把内容覆盖到 <code>C:\Users\A\.trae-cn\skills\grill-me\SKILL.md</code>（先备份旧的——它那套 "Show Changes Before Applying" 规则还有用，可以留着）</li>
+<li>用 <code>grill-me</code> 跑一个小问题，确认它真的转到了 <code>grilling</code> 的 <code>❓ Q1 / ➡️</code> 格式</li>
+<li>决定第 6 行那句 AskUserQuestion 要不要留</li>
+</ol>
+<h4 class="subsubsection">这一周做</h4>
+<ol start="4">
+<li>装 <code>domain-modeling</code> + <code>grill-with-docs</code>，在你最常用的那个文明6 工作区跑一次，让它生成 <code>CONTEXT.md</code></li>
+<li>之后每个工作区开新会话时先说一句"读 CONTEXT.md"</li>
+</ol>
+<h4 class="subsubsection">有空再做</h4>
+<ol start="6">
+<li>挑一个<strong>最乱</strong>的大工程（比如 英雄无敌X）装 <code>wayfinder</code>，在 GitHub 上建第一张地图</li>
+<li>想系统学 Lua / modinfo 时，装 <code>teach</code>，让它建 <code>MISSION.md</code></li>
+</ol>
+<h4 class="subsubsection">不用管</h4>
+<p><code>~/.trae-cn/skills/</code> 里你已经有的 <code>find-skills</code>、<code>git-commit</code>、<code>treasure-hunt</code>、<code>siliu-predictor</code>、<code>stardew-predictor</code> 等跟这套无关，不用动。</p>
+<hr>
+<h3 class="subsection">七、一句话总结</h3>
+<p><strong>对不会编程的你，这套仓库值得装的不是那 16 个工程 skill，而是它的"先对齐再动手"哲学</strong>——追问（你已经重度在用）、统一词汇（你缺的）、跨会话记录（你反复重来的根因）。把 grill-me 修好、补上 CONTEXT.md，比多装十个 skill 都值。</p>
+<h2 class="section" id="part-2">第 2 部分 · MattPocock Skills 中文版分析报告</h2>
+<p style="color: var(--text-muted); font-size: 14px;">源文件：<code>mattpocock-skills中文版-分析报告.md</code></p>
+<h2 class="section">mattpocock-skills-zh-CN 分析报告</h2>
+<p>针对你的五个场景（角色扮演 / 写作 / 生成优化 skill / 搜索分析 / 文明6 mod）定制筛选。<br>
+仓库已克隆到本地：<code>C:\Users\A\WorkBuddy AI\2026-08-30-00-29-48\_repo_zh</code></p>
+<hr>
+<h3 class="subsection">一、这个仓库是什么</h3>
+<p><code>mattpocock/skills</code> 的<strong>简体中文翻译版</strong>。作者 Matt Pocock 是 TypeScript 教育者，这套 skill 是他自己每天干活用的，不是玩具。</p>
+<p>解决的问题只有四类：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI 做的不是你想要的东西</td>
+<td>动手前先「追问」对齐需求</td>
+</tr>
+<tr>
+<td>AI 说话啰嗦、术语不一致</td>
+<td>维护一份共享术语表</td>
+</tr>
+<tr>
+<td>代码跑不起来</td>
+<td>建立能自动判定对错的反馈循环</td>
+</tr>
+<tr>
+<td>代码越写越乱成一坨</td>
+<td>关注设计，找「深模块」</td>
+</tr>
+</tbody>
+</table>
+<p><strong>共 35 个 skill</strong>，分 4 个桶：<code>engineering</code>(18) / <code>productivity</code>(7) / <code>misc</code>(4) / <code>in-progress</code>(6)。</p>
+<hr>
+<h3 class="subsection">二、skill 到底是什么（通俗版）</h3>
+<p><strong>skill = 一份给 AI 看的操作手册。</strong></p>
+<p>平时你跟 AI 说话，它是临场发挥。装了 skill 之后，AI 在合适的时候会自动（或你点名之后）翻开这份手册，按上面的步骤走。</p>
+<p>一个 skill 就是一个文件夹，核心是一个 <code>SKILL.md</code> 文件，开头几行写明「我叫什么、什么时候该用我」，下面是具体步骤。</p>
+<p><strong>两种触发方式：</strong><br>
+- <strong>用户调用</strong>：你打 <code>/grill-me</code> 这样的斜杠命令才启动。<br>
+- <strong>模型调用</strong>：AI 自己判断该用就用了，不用你喊。</p>
+<hr>
+<h3 class="subsection">三、你的场景 → 该装哪些</h3>
+<h4 class="subsubsection">场景 1：角色扮演</h4>
+<table>
+<thead>
+<tr>
+<th>skill</th>
+<th>作用</th>
+<th>为什么适合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grilling</code></td>
+<td>持续追问直到每个分支都谈透</td>
+<td>世界观/人设的压力测试。它会追着问「这两个设定冲突了，哪个算数」</td>
+</tr>
+<tr>
+<td><code>domain-modeling</code></td>
+<td>维护术语表 <code>CONTEXT.md</code></td>
+<td><strong>改造后就是你的设定集</strong>。它明确禁止往里塞实现细节，能防止设定集变大杂烩</td>
+</tr>
+<tr>
+<td><code>handoff</code></td>
+<td>把对话压成交接文档</td>
+<td>角色扮演最大的痛点是长对话失忆。换会话时用它续档</td>
+</tr>
+<tr>
+<td><code>teach</code></td>
+<td>多会话教学</td>
+<td>它的工作区结构（任务书/学习记录/HTML 讲义/参考卡）改改就是<strong>角色设定库</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 class="subsubsection">场景 2：写作 —— 这是本仓库的隐藏王牌</h4>
+<p>三个 skill 构成完整流水线，都在 <code>in-progress</code> 桶里（beta，但能用）：</p>
+<pre><code>writing-fragments  →  writing-shape  或  writing-beats
+   （探索攒素材）        （成文：直线叙述）  （成文：分支旅程）
+</code></pre>
+<ul>
+<li><strong><code>writing-fragments</code></strong>（探索）：不管结构，先往一个 md 文件里堆素材。金句、片段、半成型的想法、 vignette、牢骚、金句都可以。核心是抓 <strong>leading word</strong>——一个能撑起全篇的隐喻词。</li>
+<li><strong><code>writing-shape</code></strong>（成文·直线）：先定读者已具备哪些概念（<strong>grounding</strong>），再一段一段往前推。每写一段就问「这段给读者的东西，上一段没给过吗」。</li>
+<li><strong><code>writing-beats</code></strong>（成文·分支）：choose-your-own-adventure 风格。每次给 2-3 个候选「下一拍」，你选一个，写那一拍，停。适合散文、叙事、演讲稿。</li>
+</ul>
+<p><strong>关键设计：grounding（打地基）</strong>。每个概念必须先落地，后面的段落才能依赖它。开头要求太多会把读者劝退，内部打地基太多开头又会淹死在定义里——这个杠杆要跟你确认。</p>
+<h4 class="subsubsection">场景 3：生成 / 优化 skill</h4>
+<ul>
+<li><strong><code>writing-for-agents</code></strong> —— 本仓库最有价值的一个，必装。核心概念：</li>
+<li><strong>context pointer</strong>：skill 的 description 就是指针，措辞决定 AI 多可靠地找到它。</li>
+<li><strong>leading word</strong>（门槛词）：一个紧凑概念，比如 <em>tight</em>（紧的循环）、<em>red</em>（循环变红）。一个词锚定一整片行为，比三句话管用。</li>
+<li><strong>渐进披露</strong>：只把部分分支用到的内容推到指针后面。</li>
+<li><strong>否定句是失败模式</strong>：写「不要想大象」反而把大象拖进上下文。要正向表述。</li>
+<li><strong>no-op 检查</strong>：一条 AI 本来就会照做的指令是白写的，删掉整句。</li>
+<li><strong><code>grilling</code></strong> —— 用来追问「这个 skill 到底要解决什么」。</li>
+</ul>
+<h4 class="subsubsection">场景 4：搜索分析</h4>
+<ul>
+<li><strong><code>research</code></strong> —— 只信一手来源（官方文档、源码、spec），每个结论都要标出处，存成 Markdown。要求派<strong>后台 agent</strong> 去跑，你可以继续干活。</li>
+<li><strong><code>wait-what</code></strong> —— AI 说了一堆你没听懂？发这个，它用大白话重讲一遍，并套用你 <code>CONTEXT.md</code> 里的词汇。</li>
+</ul>
+<h4 class="subsubsection">场景 5：文明6 mod（XML / SQL / Lua）</h4>
+<ul>
+<li><code>diagnosing-bugs</code>（<strong>需改造</strong>，见第五节）</li>
+<li><code>domain-modeling</code>（术语表：Modifier / Requirement / Type 命名规范）</li>
+<li><code>research</code>（查 Civ6 官方 schema 和 Modiki）</li>
+<li><code>prototype</code>（<strong>逻辑分支</strong>：生成单个 HTML 文件验证 Modifier 链状态机，非程序员也能点按钮跑）</li>
+</ul>
+<hr>
+<h3 class="subsection">四、明确不该装的（对你没用）</h3>
+<p><code>tdd</code>、<code>code-review</code>、<code>codebase-design</code>、<code>improve-codebase-architecture</code>、<code>implement</code>、<code>resolving-merge-conflicts</code>、<code>setup-pre-commit</code>、<code>migrate-to-shoehorn</code>、<code>scaffold-exercises</code>、<code>setup-ts-deep-modules</code>、<code>ask-matt</code>、<code>triage</code>、<code>to-tickets</code>、<code>wayfinder</code>、<code>to-spec</code>、<code>wizard</code>、<code>git-guardrails-claude-code</code></p>
+<p>理由：要么强依赖 TypeScript/git/CI 工程环境，要么依赖 issue tracker 工作流。你是个人非工程场景，装了只会占上下文。</p>
+<hr>
+<h3 class="subsection">五、专项分析：bug 类 skill 对简单游戏 mod 适用吗</h3>
+<h4 class="subsubsection">结论：**适用，但要换掉它的引擎。整体可用度约 70%。**</h4>
+<p><code>diagnosing-bugs</code> 的六阶段：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>内容</th>
+<th>Civ6 mod 是否可用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>建 feedback loop</td>
+<td>❌ <strong>卡住</strong>，需替换</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>复现 + 最小化</td>
+<td>⚠️ 部分可用</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>生成 3-5 个<strong>可证伪</strong>假设并排序</td>
+<td>✅ 完全可用，最值钱的部分</td>
+</tr>
+<tr>
+<td>P4</td>
+<td>插桩，一次只改一个变量，<code>[DEBUG-xxxx]</code> 前缀</td>
+<td>✅ 完全可用</td>
+</tr>
+<tr>
+<td>P5</td>
+<td>修复 + 回归测试</td>
+<td>⚠️ mod 通常没有 test seam</td>
+</tr>
+<tr>
+<td>P6</td>
+<td>清理 + 复盘「什么本可以预防」</td>
+<td>✅ 完全可用</td>
+</tr>
+</tbody>
+</table>
+<h4 class="subsubsection">P1 为什么会卡住</h4>
+<p>P1 是整个 skill 的核心（「建对 loop，bug 就修好了 90%」），它列了 10 种构造方式：</p>
+<ol>
+<li>失败的测试 ❌ 没有 test runner</li>
+<li>curl / HTTP 脚本 ❌ 没有 dev server</li>
+<li>CLI + fixture + diff 已知正确快照 ✅ <strong>对 SQL 极好用</strong></li>
+<li>无头浏览器 ❌ 不能 headless 跑游戏</li>
+<li>重放捕获的 trace ⚠️ <code>Database.log</code> / <code>lua.log</code> 勉强算</li>
+<li>一次性 harness ✅ 用 <code>lua.exe</code> 单独加载 Lua 做语法检查</li>
+<li>属性/模糊测试 ❌</li>
+<li>二分 harness ❌</li>
+<li>差分 loop ✅ 旧版 vs 新版数据库 diff</li>
+<li>人工参与的 bash 脚本 ✅ 最后手段，人进游戏看</li>
+</ol>
+<p><strong>前 5 种（主流解法）全废，只剩边角料。</strong> 直接照搬会在第一步就撞墙。</p>
+<h4 class="subsubsection">更重要的判断：mod 的 bug 不是逻辑 bug</h4>
+<p>Civ6 mod 的 bug 绝大多数是<strong>数据/配置类 bug</strong>，特征是<strong>游戏不崩溃，只是效果不生效</strong>：</p>
+<ul>
+<li><code>ModifierType</code> 不存在</li>
+<li><code>CollectionType</code> / <code>EffectType</code> 组合不合法</li>
+<li><code>RequirementSet</code> 引用了不存在的 <code>Requirement</code></li>
+<li>SQL <code>UPDATE</code> 的 WHERE 匹配 0 行</li>
+<li>XML 标签写错 / 少闭合</li>
+<li>Lua 里 nil 调用</li>
+<li><code>.modinfo</code> 的 <code>LoadOrder</code> 顺序错</li>
+</ul>
+<p>对这类 bug，假设驱动调试是<strong>杀鸡用牛刀</strong>。一个静态校验脚本能在 3 秒内命中 80% 的成因——检查所有 Type 引用是否存在于基础数据库、检查 CollectionType/EffectType 组合是否合法。而跑完 P3 的假设排序要 30 分钟。</p>
+<h4 class="subsubsection">推荐方案：分流</h4>
+<pre><code>先跑「Civ6 校验 loop」（静态检查 + 日志 diff）
+   ├─ 命中 → 直接修，结束
+   └─ 没命中 → 再进 diagnosing-bugs 的 P3-P6
+</code></pre>
+<h4 class="subsubsection">改造量：很小</h4>
+<p>做成 <code>diagnosing-civ6-mods</code>：<br>
+- <strong>替换 P1 一整节</strong>：把 10 种 loop 换成 Civ6 版（sqlite3 打库 + SELECT diff / <code>lua.exe</code> 语法检查 / XML 结构校验 / <code>Database.log</code> diff / 人工进游戏）<br>
+- <strong>改 P5 一句话</strong>：regression test → 「可重复运行的校验脚本」<br>
+- <strong>其余原样</strong></p>
+<p>P3 的「3-5 个可证伪假设」对 mod 一样有效。常见假设池：<br>
+ModifierType 拼错 / Requirement 未定义 / LoadOrder 顺序 / SQL WHERE 匹配 0 行 / Lua 变量作用域。</p>
+<hr>
+<h3 class="subsection">六、专项分析：domain 类 skill 能通用化吗</h3>
+<h4 class="subsubsection">结论：**能，而且比你想象的容易——改动量约 15 行。**</h4>
+<p><code>domain-modeling</code> 只做两件事：<br>
+1. 维护一份 glossary（<code>CONTEXT.md</code>）<br>
+2. 写 ADR（架构决策记录）</p>
+<p><strong>它唯一的代码耦合点</strong>是这一句：</p>
+<blockquote>
+<p>Cross-reference with code —— 当用户描述某事如何工作时，检查代码是否同意。</p>
+</blockquote>
+<p><strong>其余全部是纯语言工作</strong>，跟编程毫无关系。</p>
+<h4 class="subsubsection">通用化对照表</h4>
+<table>
+<thead>
+<tr>
+<th>原版概念</th>
+<th>角色扮演</th>
+<th>写作</th>
+<th>文明6 mod</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CONTEXT.md</code> 术语表</td>
+<td>世界观设定集 / 人物设定</td>
+<td>作品术语表 / 风格指南</td>
+<td>Modifier/Type 命名规范</td>
+</tr>
+<tr>
+<td>「挑战术语」</td>
+<td>「你说的『圣殿骑士团』和设定集里的『教团』是一回事吗」</td>
+<td>「你说的『用户』和『读者』是两个东西」</td>
+<td>「Yield 和 Bonus 混用了」</td>
+</tr>
+<tr>
+<td>「用边缘场景施压」</td>
+<td>「如果角色被背叛，这条誓言还成立吗」</td>
+<td>「这个词在第三章的用法和第一章一致吗」</td>
+<td>「这个 Modifier 在没有海岸线的图上会怎样」</td>
+</tr>
+<tr>
+<td>「检查代码是否同意」</td>
+<td>「检查已写剧情是否同意」</td>
+<td>「检查已写章节是否同意」</td>
+<td>「检查基础数据库是否同意」</td>
+</tr>
+<tr>
+<td>ADR</td>
+<td>剧情决策记录（可选）</td>
+<td>写作决策记录（可选）</td>
+<td>保留</td>
+</tr>
+</tbody>
+</table>
+<h4 class="subsubsection">关键判断：通用化后，最大受益场景不是 mod 开发</h4>
+<p>mod 开发的术语表基本是<strong>游戏给定的</strong>（Modifier、Requirement、ModifierType），你不太需要重新定义。</p>
+<p>而<strong>角色扮演和写作的术语完全是你自己造的</strong>，最需要一致性维护——长篇叙事里同一个概念换三个名字是致命的。</p>
+<p>所以 domain 类通用化后，对你价值排序是：<br>
+<strong>角色扮演 &gt; 写作 &gt; 文明6 mod</strong></p>
+<h4 class="subsubsection">硬约束（这条最有用）</h4>
+<blockquote>
+<p><code>CONTEXT.md</code> 必须完全不包含 implementation details。不要把它当 spec、草稿纸或实现决策的仓库。<strong>它只是一份 glossary。</strong></p>
+</blockquote>
+<p>这一条能防止你把设定集写成大杂烩。保留它。</p>
+<h4 class="subsubsection">具体改动</h4>
+<ol>
+<li>删掉或改为可选的 ADR 一节（原版要求「难以逆转 + 无背景会令人意外 + 真实权衡」三条全中才写，非代码场景基本不写）</li>
+<li>改「Cross-reference with code」一句 → 泛化为「对照已有产物」</li>
+<li>其余原样</li>
+</ol>
+<p>需要连带复制：<code>CONTEXT-FORMAT.md</code>、<code>ADR-FORMAT.md</code></p>
+<hr>
+<h3 class="subsection">七、安装步骤（无需编程基础）</h3>
+<h4 class="subsubsection">你已经装了什么</h4>
+<p><strong>Trae</strong> <code>C:\Users\A\.trae-cn\skills\</code> 已有 16 个，其中来自本仓库的 6 个：</p>
+<table>
+<thead>
+<tr>
+<th>已装</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grilling</code></td>
+<td>中文版 ✅</td>
+</tr>
+<tr>
+<td><code>grill-me</code></td>
+<td><strong>英文版</strong> ⚠️（和 grilling 功能重复）</td>
+</tr>
+<tr>
+<td><code>handoff</code></td>
+<td>中文版 ✅</td>
+</tr>
+<tr>
+<td><code>research</code></td>
+<td>中文版 ✅</td>
+</tr>
+<tr>
+<td><code>wait-what</code></td>
+<td>中文版 ✅</td>
+</tr>
+<tr>
+<td><code>writing-for-agents</code></td>
+<td>中文版 ✅</td>
+</tr>
+</tbody>
+</table>
+<p>另外你已有 <strong>两个自制 Civ6 skill</strong>：<code>civ6-mod-expert-optimized</code>、<code>civ6-game-effect-extractor</code>，<br>
+还有 <code>skill-builder</code>（生成/优化 skill）、<code>deep-explore</code>、<code>find-skills</code> 等。</p>
+<p><strong>WorkBuddy</strong> <code>C:\Users\A\.workbuddy-ai\skills\</code> 目前只有 <code>grilling</code> 一个。</p>
+<h4 class="subsubsection">安装 = 复制文件夹，不用敲任何命令</h4>
+<p><strong>WorkBuddy：</strong></p>
+<pre><code>复制  _repo_zh\skills\&lt;桶&gt;\&lt;skill名&gt;\     整个文件夹
+到    C:\Users\A\.workbuddy-ai\skills\
+</code></pre>
+<p><strong>Trae：</strong></p>
+<pre><code>复制  _repo_zh\skills\&lt;桶&gt;\&lt;skill名&gt;\     整个文件夹
+到    C:\Users\A\.trae-cn\skills\
+</code></pre>
+<h4 class="subsubsection">⚠️ 三个必须注意的点</h4>
+<ol>
+<li>
+<p><strong>必须复制整个文件夹，不能只复制 <code>SKILL.md</code>。</strong> 很多 skill 带必需的附属文件：<br>
+   - <code>domain-modeling</code> → <code>CONTEXT-FORMAT.md</code>、<code>ADR-FORMAT.md</code><br>
+   - <code>teach</code> → <code>MISSION-FORMAT.md</code>、<code>LEARNING-RECORD-FORMAT.md</code>、<code>RESOURCES-FORMAT.md</code>、<code>GLOSSARY-FORMAT.md</code><br>
+   - <code>writing-for-agents</code> → <code>SKILL-MECHANICS.md</code><br>
+   - <code>prototype</code> → <code>LOGIC.md</code>、<code>UI.md</code></p>
+</li>
+<li>
+<p><strong>写作三件套在 <code>in-progress</code> 桶里</strong>，是 beta，不随官方 plugin 发布。想装必须手动复制（正好你只能用手动方式）。</p>
+</li>
+<li>
+<p><strong><code>setup-matt-pocock-skills</code> 不要跑。</strong> 它是给工程团队配 issue tracker（GitHub/GitLab）和 triage labels 的，你用不上。跳过它不影响其他 skill。</p>
+</li>
+</ol>
+<hr>
+<h3 class="subsection">八、待定事项</h3>
+<p>以下需要你拍板（见对话中的提问）：</p>
+<ol>
+<li>装到哪个工具：WorkBuddy / Trae / 两个都装</li>
+<li>装多少：精选约 10 个 / 全量 35 个 / 只补 Trae 缺的</li>
+<li>是否要改造，以及先改哪个：<code>diagnosing-bugs</code> → Civ6 版，还是 <code>domain-modeling</code> → 通用术语表版</li>
+</ol>
+<h2 class="section" id="part-3">第 3 部分 · MattPocock Skills 中文版 · 选型与安装指南</h2>
+<p style="color: var(--text-muted); font-size: 14px;">源文件：<code>mattpocock-skills-中文版-选型与安装指南.html</code></p>
+<div class="callout">
+<div class="icon">📄 源格式说明</div>该源文件为 HTML 格式（23586 字符）。下面是提取后的纯文本内容；如需查看带样式的原版 HTML，请直接打开源文件 <code>mattpocock-skills-中文版-选型与安装指南.html</code>。
+</div>
+<p>Matt Pocock Skills 中文版 · 选型与安装指南 Matt Pocock Skills 中文版 · 选型与安装指南 仓库： github.com/vinvcn/mattpocock-skills-zh-CN · 共 29 个可安装 skill · 面向非程序员的取舍说明 1. 这是什么：一句话讲清楚 2. 全部 29 个 skill 清单 3. 按你的 5 个场景筛选 4. 最终推荐安装清单 5. 免命令行安装步骤 6. 深度分析：bug 类 skill × 文明6 7. 深度分析：domain 类通用化 8. 坑与注意事项 1. 这是什么：一句话讲清楚 这是一套「给 AI 用的工作方法说明书」，不是软件，也不是代码库。 原作者 Matt Pocock 是 TypeScript 社区的知名教育者。他把自己每天做真实工程时「怎么跟 AI 协作」的经验，写成了一个个纯文本的 SKILL.md 文件。这个仓库是社区做的 简体中文翻译版 ——把说明文字翻成了中文，但文件夹名、skill 名、命令、代码块全部保留英文，以免安装后跑不起来。 「Skill」到底是个什么东西？ 你可以把它理解成 一张塞给 AI 的工作流程卡片 。平时你跟 AI 说话，它按自己的默认习惯回答；一旦激活某个 skill，它就会严格按照卡片上写的步骤走。 技术上它只是一个文件夹，里面放一个 SKILL.md 文本文件（有些附带几个参考文档）。 没有可执行程序，不会改写你的系统，删掉文件夹就彻底没了。 它要解决的是 AI 协作最常见的 4 个崩盘点 AI 做出来的不是我想要的 → 解法：先让 AI 反过来追问你（ grill-me / grill-with-docs ） AI 说话啰嗦、每次说法都不一样 → 解法：建一份项目术语表 CONTEXT.md （ domain-modeling ） 代码跑不起来、改了又坏 → 解法：先造一个能「报错」的验证回路（ diagnosing-bugs / tdd ） 越改越乱成一坨 → 解法：定期扫描架构、记录决策（ improve-codebase-architecture ） 两种调用方式（很重要） 手动触发 只有你主动喊它的名字（例如输入 /grill-me ）它才出现。用于「编排类」工作。 自动触发 AI 觉得任务匹配时会自己用上它。用于「纪律类」工作，装了就一直在背后生效。 2. 全部 29 个 skill 清单 工程类 engineering（18 个） 名称 触发 一句话说明 对你的价值 grill-with-docs 手动 反复追问你的想法，同时把术语表 CONTEXT.md 和决策记录 ADR 更新好 高 ask-matt 手动 「现在这情况该用哪个 skill？」——路由导航员 高 新手友好 research 自动 派后台 AI 去查一手资料，产出带出处引用的 Markdown 报告 高 diagnosing-bugs 自动 纪律化排错六阶段：造验证回路→复现最小化→列假设→插桩→修→复盘 高 domain-modeling 自动 主动维护项目术语表和架构决策记录，纠正你用错的词 高 handoff 手动 把当前对话压缩成交接文档，让下一个会话接着干 高 grilling 自动 追问引擎本体，上面几个追问类 skill 的共同底座 高 grill-me 手动 纯追问，不写文档，非代码场景用 高 writing-for-agents 自动 教你写好 skill / AGENTS.md 的方法论 高 写 skill 必装 prototype 自动 造一次性原型验证某个设计，逻辑类产出一个可双击的 HTML 文件 中 teach 手动 把当前文件夹当教学空间，跨会话教你一样新东西 中 to-questionnaire 手动 把你答不了的决定，转成一份问卷交给能答的人 中 wait-what 手动 「这段没看懂」——让 AI 补上下文、用人话重说 中 to-spec 手动 把讨论整理成一份规格说明书并发到 issue 系统 低 to-tickets 手动 把计划拆成一堆带依赖关系的小任务票 低 triage 手动 按状态机推进 issue 的分类流转 低 wayfinder 手动 把超大工程拆成「决策票」地图逐步推进 低 implement 手动 照着规格实现一段工作，收尾跑代码审查 低 improve-codebase-architecture 手动 扫描代码库找「该深挖的地方」，产出可视化 HTML 报告 低 tdd 自动 测试驱动开发：红-绿-重构循环 低 无测试框架则难用 code-review 自动 双轴代码审查（规范 / 是否合规格），并行子代理跑 低 codebase-design 自动 深模块设计：小接口、干净接缝、通过接口测试 低 resolving-merge-conflicts 自动 逐个 hunk 解 Git 冲突，绝不 abort 低 单人开发用不上 wizard 自动 生成交互式 bash 向导，带你走只能人做的步骤 低 setup-matt-pocock-skills 手动 配置 issue 系统 / 标签 / 文档布局 不用装 依赖上面那批 生产力类 productivity（7 个） 已包含在上表中 grill-me / grilling / handoff / teach / to-questionnaire / wait-what / writing-for-agents 。 杂项 misc（4 个）—— 全部不建议你装 名称 说明 为什么跳过 git-guardrails-claude-code 给 Claude Code 装 Git 危险命令拦截钩子 只适配 Claude Code migrate-to-shoehorn 把 TypeScript 类型断言迁移到 shoehorn 库 纯 TypeScript 专用 scaffold-exercises 生成练习题目录结构 做课程才用得上 setup-pre-commit 配 Husky + lint-staged 提交钩子 需要 npm 工程 3. 按你的 5 个场景筛选 你的场景 推荐 skill 怎么用 ① 角色扮演 grill-me grill-with-docs handoff 开局用 grill-me 让 AI 把角色设定、世界观规则的每个分支都问透，逼你补全没想到的地方； grill-with-docs 会顺手生成一份 长期设定集（CONTEXT.md） ，之后每次对话都引用，角色不会跑偏； handoff 解决最痛的问题——长篇跑团/剧情跑到一半上下文爆了，一键压缩成交接文档，新会话无缝续上。 ② 写作 grill-with-docs handoff research grill-me 写长篇/系列文时， grill-with-docs 建「术语与设定词典」（人名、地名、势力、专有名词统一，AI 不会这次叫「林府」下次叫「林宅」）； research 派后台 AI 查背景资料并 逐条标注出处 ，适合历史/考据向写作； handoff 做章节间衔接。 ③ 生成 / 优化 skill writing-for-agents ask-matt writing-for-agents 是这份仓库里 唯一专门教你写 skill 的部分，涵盖：description 怎么写才能被准确触发、什么时候该拆分文件、什么叫「完成标准」、怎么写 AI 才会稳定执行。这是你优化自己 skill 的核心武器。 ④ 搜索分析 research wait-what research 的价值在于「 只认一手来源 」——官方文档、源码、规范原文，而不是二手解读，并且每条结论都要标出处，保存成 Markdown 文件。它是后台跑的，你不用干等。 wait-what 用来当场要求 AI 把看不懂的结论用人话重讲。 ⑤ 文明6 Mod（XML/SQL/Lua） diagnosing-bugs domain-modeling grill-with-docs research handoff 详见下面第 6、7 两节的深度分析。核心是： diagnosing-bugs 需要按游戏 Mod 的特点改造验证回路， domain-modeling 用来治理文明6 那一大堆一词多义的术语。 4. 最终推荐安装清单 第一梯队：必装（9 个） skill 来源目录 主要服务场景 grilling productivity 追问引擎本体（其他追问类依赖它） grill-me productivity 角色扮演 / 写作 grill-with-docs engineering 角色扮演 / 写作 / Mod 规划 handoff productivity 全部场景（上下文续命） research engineering 搜索分析 / 写作 / Mod 查资料 diagnosing-bugs engineering Mod 排错 domain-modeling engineering Mod 术语治理 / 写作设定集 writing-for-agents productivity 生成与优化 skill ask-matt engineering 「该用哪个 skill」导航 第二梯队：看着办（4 个） teach （想系统性学 Lua / SQL 时有用）、 wait-what （随时要求讲人话）、 to-questionnaire （角色扮演里可当「角色问卷」用）、 prototype （想把一条 Modifier 链做成可点击 HTML 演示时）。 明确跳过（16 个） to-spec · to-tickets · triage · wayfinder · implement · setup-matt-pocock-skills · tdd · code-review · codebase-design · improve-codebase-architecture · resolving-merge-conflicts · wizard · git-guardrails-claude-code · migrate-to-shoehorn · scaffold-exercises · setup-pre-commit 为什么跳过这批？ 它们几乎全部围绕一个前提： 你有一个用 GitHub 管 issue 的多人软件工程团队 。你是一个人做 Mod、写东西、玩角色扮演，没有 issue 系统、没有 CI、没有 Git 冲突、没有单元测试框架。装了只会让 AI 的注意力被分散，触发一堆你用不到的流程。 5. 免命令行安装步骤 官方推荐的安装命令是 npx skills@latest add vinvcn/mattpocock-skills-zh-CN ，这需要装 Node.js 并开终端。 你不需要走这条路 ——因为这些 skill 全是纯文本文件，手动复制文件夹效果完全一样，而且更好控。 1 下载仓库压缩包 打开 https://github.com/vinvcn/mattpocock-skills-zh-CN → 点绿色的 Code 按钮 → 选 Download ZIP → 解压到任意位置（比如桌面）。 不用 git clone，不用装任何东西。 2 挑出要装的 skill 文件夹 进到解压后的 mattpocock-skills-zh-CN-main\skills\ ，里面有三个子目录 engineering / productivity / misc 。按第 4 节的清单，把对应文件夹复制出来。 整个文件夹一起复制，不要只拿 SKILL.md——有些 skill 带附属文档（例如 domain-modeling 带 CONTEXT-FORMAT.md 和 ADR-FORMAT.md ， diagnosing-bugs 带 scripts\ ， writing-for-agents 带 SKILL-MECHANICS.md ）。 3 放进 WorkBuddy 的技能目录 目标路径： C:\Users\A\.workbuddy-ai\skills\ 把复制出来的文件夹整个粘进去，最终结构应为： C:\Users\A\.workbuddy-ai\skills\ ├─ grilling\SKILL.md ├─ grill-me\SKILL.md ├─ grill-with-docs\SKILL.md ├─ handoff\SKILL.md ├─ research\SKILL.md ├─ diagnosing-bugs\SKILL.md + scripts\ ├─ domain-modeling\SKILL.md + CONTEXT-FORMAT.md + ADR-FORMAT.md ├─ writing-for-agents\SKILL.md + SKILL-MECHANICS.md └─ ask-matt\SKILL.md 文件夹名必须和 SKILL.md 里 frontmatter 的 name: 一致，否则可能识别不到。 4 同步一份给 Trae（可选） Trae 用的是另一套目录，两种粒度二选一： 项目级 （只对这个 Mod 项目生效）： &amp;lt;你的项目根目录&amp;gt;\.trae\skills\ 全局级 （所有项目生效）： C:\Users\A\.trae\skills\ （国内版 Trae 是 .trae-cn\skills\ ） 把同样的文件夹粘进去即可。注意 .trae 是隐藏目录，资源管理器里需要开启「显示隐藏的项目」。 5 验证是否生效 新开一个对话，直接问：「 现在有哪些 skill 可用？ 」或者输入 /grill-me 。如果 AI 能按追问格式回你（带 ❓ Q1 和 ➡️ 推荐答案 ），就说明装好了。 如果没反应，多半是文件夹名和 name: 不一致，或者层级多套了一层。删掉重放一次即可——没有任何残留风险。 关于 setup-matt-pocock-skills 官方 README 强调首次安装要跑它。 但你可以完全跳过 ——它配的是 issue 系统（GitHub/Linear/本地 markdown）和 triage 标签，而你装的那批 skill 里没有 triage / to-tickets / to-spec ，根本不会有 skill 去读这些配置。 6. 深度分析：bug 类 skill 适合文明6 Mod 吗？ 结论 适用，但必须改一处：把「Phase 1 造验证回路」的具体手段换成游戏 Mod 能用的手段。 skill 的骨架（六阶段纪律）是完全通用的，它唯一绑定具体技术的地方就是 Phase 1 里那份「10 种构造回路的方法」清单——那份清单是给 Web/后端工程师写的，全是什么 curl、Playwright、e2e 测试。你把它替换掉即可，其他五个阶段一个字都不用改。 为什么这套纪律反而是你最需要的 Mod 开发最容易犯的错就是： 改一下 XML → 开游戏 → 没生效 → 再改 → 再开 → 还是没生效 → 开始乱猜 。开一次文明6 要好几分钟，几轮下来一小时没了，最后靠「玄学」蒙对一个改法。这正是 diagnosing-bugs 明确要防的失败模式——skill 原文写得很直白： 「如果你发现自己在 command 存在前就读代码构建理论， 停下 ；直接跳到 hypothesis 正是这个 skill 要防止的失败。」 所以它的核心要求翻译成人话就是： 在你开始猜原因之前，先造出一个「一跑就知道对不对」的自动检查，并且确认它现在会报错。 Phase 1 的文明6 改造版：四层回路 按「从快到慢」排序，优先用能秒级返回的： 第 0 层 · 语法与格式校验（秒级，必建） XML ：检查标签闭合、属性引号。让 AI 给你写个一次性 Python 脚本批量跑 xml.etree 解析，坏文件立刻报行号。 Lua ：语法检查用 Lua 编译器（ luac -p 文件.lua 或同等的纯检查命令），只解析不执行，瞬间出结果。 SQL ：把你的 .sql 丢进一个本地 SQLite 空库跑一遍解析，语法错立刻暴露。 这一层能挡掉 Mod 开发中相当大比例的入门级错误（少一个 &amp;lt;/Row&amp;gt; 、逗号写错、表不存在）。 第 1 层 · 数据库断言（秒级，这是最有价值的一层） 文明6 把游戏数据全放进 SQLite 里，游戏启动后会在缓存目录生成一份调试用的数据库（不同版本/平台路径略有差异， 让 AI 帮你在本机 locate 一次 ，不要猜路径）。这份东西的意义是：你可以 不开游戏 就用 SQL 查询验证「我的这条数据到底进没进库」。 -- 断言：我的自定义单位是否真的注册进去了 SELECT UnitType, Name, Cost FROM Units WHERE UnitType = &#x27;UNIT_MY_HERO&#x27;; -- 断言：我的 Modifier 是否挂上了 SELECT ModifierId, ModifierType FROM Modifiers WHERE ModifierId LIKE &#x27;MYMOD_%&#x27;; -- 断言：RequirementSet 是否有成员（空集合是极常见的静默失败） SELECT RequirementSetId, RequirementId FROM RequirementSets WHERE RequirementSetId = &#x27;MYMOD_REQSET_X&#x27;; 写成脚本后： 它能捕捉你的确切症状，每次结果稳定，跑起来几秒，AI 可以无人值守跑 ——四条标准全中，这就是 skill 说的「tight loop」。比如说「新单位在游戏里找不到」，上面第一条查询返回空行，回路就变红了。 第 2 层 · 日志比对（十秒级） 文明6 会输出 Modding.log / Database.log / Lua.log 等日志。做法：先存一份「干净基线」，每次改完跑个脚本把新日志和基线做 diff，只看新增行。 Database.log 里的 near &quot;xxx&quot;: syntax error 会直接告诉你哪条 SQL 挂了。 第 3 层 · 人工介入循环（分钟级，最后手段） 有些问题（UI 不显示、触发时机不对）确实必须开游戏看。这时用 skill 自带的 scripts/hitl-loop.template.sh 模板——它的作用是 让这个「人肉循环」也保持结构化 ：脚本一步步提示你「现在请启动游戏 → 载入这个存档 → 看 XX → 输入你观察到的结果」，把你每次的观察结果记下来喂回给 AI。这比你自己乱试强得多。 需要改的其他细节 原 skill 的说法 文明6 场景的落地 「先读 CONTEXT.md 建立 mental model」 完全照做，而且会和第 7 节的 domain-modeling 联动 「检查你将触碰区域的 ADRs」 照做——比如你之前记录过「为什么这个 Mod 用 Modifier 而不直接改 Units 表」，排错时 AI 会先读它，不会推翻你的设计 「Phase 5 在正确的 seam 上写 regression test」 没有测试框架时， 把最小复现场景固化成一个脚本或查询 ，存在项目里当回归检查用。skill 也说了：找不到正确 seam 本身就是有价值的发现，记下来即可 「Phase 4 用 debugger / REPL / 打日志」 Lua 侧用 FireTuner / print() 打进 Lua.log， 每条日志加唯一前缀 （如 [DEBUG-a4f2] ），方便最后一次性 grep 清掉——Mod 里残留调试日志会刷屏玩家控制台，这步别省 「Redact 掉所有 secret」 Mod 场景基本无 secret，但路径里含用户名时注意一下 给你的实际建议 不需要真的去改 SKILL.md 文件。装好之后，在 你的 Mod 项目根目录建一个 AGENTS.md （或 Trae 的项目规则文件），把上面这套四层回路写进去，再写一句「遇到 bug 时，按 diagnosing-bugs 的六阶段流程执行，Phase 1 优先使用本文件定义的四层回路」。 这样 skill 提供纪律，项目文件提供你的环境细节，两者叠加——而且项目文件你随时能改，不影响 skill 本体。 7. 深度分析：domain 类 skill 能通用化吗？ 结论 能，而且改动量比你想象的小得多。 更准确地说： domain-modeling 本身 几乎没有技术栈绑定 ，它是这批 skill 里通用性最高的一个。真正需要你动手的，只是把几处「举例用的示例」换成你的内容。 为什么它天生就是通用的 它干的事只有两件： 维护一份 CONTEXT.md —— 一份 术语词典 ，规定「这个词在这个项目里到底指什么」，以及「哪些近义词不许用」。 在 docs/adr/ 下写 ADR（架构决策记录） —— 记下「为什么当初这么定」，但只在三个条件同时满足时才写：难逆转、不看上下文会让人困惑、确实是权衡后的选择。 这两件事跟「用什么语言」毫无关系。 它唯一的技术耦合点，是文件结构示例里的 src/ 目录 ——那是给软件项目举例用的。换成你的 Mod 目录结构就行了。 具体改哪三处 改动 1 · 文件结构示例（ SKILL.md 的 File structure 段） 原文示例： / |- CONTEXT.md |- docs/ | <code>- adr/ </code>- src/ 改成你的 Mod 结构（示例，按你实际目录调）： /MyCiv6Mod/ |- CONTEXT.md 规则不用动：它是「惰性创建」的——没有 CONTEXT.md 时，等第一个术语被敲定才创建；没有 docs/adr/ 时，等第一个 ADR 需要出现才创建。所以你不用预先建一堆空文件。 改动 2 · 术语格式示例（ CONTEXT-FORMAT.md ） 原文件的示例术语是 Order / Invoice / Customer（电商例子）。换成文明6 的。下面这份可以直接抄： # 我的文明6 Mod 本 Mod 新增 X 文明 / Y 单位 / Z 建筑，术语以本文件为准。 ## Language <strong>UnitType</strong>: 单位的「类型定义」（数据表里的一行，如 UNIT_WARRIOR）。不是场上的具体单位实例。 _Avoid_: 单位、Unit（单独说 Unit 时默认指 UnitType，但涉及实例时必须写明） <strong>Unit（实例）</strong>: 地图上一个具体的、有血量有经验值的单位个体。 _Avoid_: UnitType、单位类型 <strong>Modifier</strong>: 一条「效果规则」，说明某个能力在什么条件下给谁加什么数值。本身不含目标。 _Avoid_: 效果、加成、buff <strong>Requirement</strong>: Modifier 生效的前置条件判断项，单个。 _Avoid_: 条件（太泛） <strong>RequirementSet</strong>: 一组 Requirement 的集合，带 SetAlias，供 Modifier 引用。 _Avoid_: Requirement 组、条件集 <strong>Trait</strong>: 文明/领袖的专属特性容器，通过 TraitType 关联到具体效果。 _Avoid_: 特性、能力 <strong>Database（游戏库）</strong>: 文明6 启动时由全部 XML/SQL 合并生成的 SQLite 数据库。 _Avoid_: 存档、DB 改动 3 · 加一条 Mod 专属的追问提示（可选但推荐） 在 SKILL.md 的 Sharpen fuzzy language 小节后面补一段，让 AI 知道该在哪类问题上较真： ### 文明6 特有的高危歧义 讨论 Mod 逻辑时，遇到以下情况必须停下来要求用户精确界定： - 说的是类型定义还是场上实例（UnitType vs Unit） - Modifier 是否已被 RequirementSet 正确挂载（空 Set 会静默失效） - 数据表列名是否与游戏原版一致（拼写/大小写错误不会报错，只会不生效） - 文本 key 是否在 Text/ 本地化文件中有对应条目（缺失会显示占位符） 改完之后你会得到什么 AI 不再混用术语。 你说「给这个单位加个 buff」，它会反问：「你说的是新增一条 Modifier，还是改 Units 表的数值？这两件事在这份 MOD 里是不同的做法。」 跨会话不漂移。 隔一周回来改 Mod，AI 读一眼 CONTEXT.md 就知道你当初的叫法。 设计矛盾会被当场抓出来。 skill 有个规矩：你说「A 是这样」时，它要去核对实际代码（XML/Lua）是不是这样，不一致立刻指出。 决策有据可查。 比如「为什么用 Modifier 覆盖而不是直接改原版 Units 表」——这符合 ADR 三条件（难逆转、后人会疑惑、确实有权衡），值得记一条。 一个提醒 domain-modeling 是 自动触发 型，装了就一直在后台生效，不需要你喊它。好处是省心，代价是它会在你觉得「只是随便聊聊」的时候也来纠正你的用词。如果觉得烦，在 SKILL.md 的 frontmatter 里加一行 disable-model-invocation: true ，就变成只有你主动喊才触发。 同一套东西对写作/角色扮演的用法 把上面的思路平移过去： CONTEXT.md 就是你的 设定集 / 世界观词典 。人物名、地名、势力、专有称谓全部锁定写法和含义，AI 不会今天写「北境」明天写「北方领地」。多个作品/世界观时用 CONTEXT-MAP.md 分别指向各自的 CONTEXT.md 。 grill-with-docs 内置了这套机制，所以它在写作场景里也是首选。 8. 坑与注意事项 名字叫 writing 但不是教写作的 writing-for-agents 的准确含义是「 写给 AI 看的文档 」，不是「教 AI 写小说/写文章」。想要写作能力，请走 grill-with-docs + handoff 的组合。 中文版 vs 英文原版 这个中文版是社区翻译， 内容同步上游但有滞后 。好处是对中文模型和中文使用者更友好、概念转换成本低。目录名和 skill 名仍是英文，这是刻意为之，别去改——改了会破坏触发。 两种安装方式只能选一种 官方的 npx skills add 和 Claude Code 的 /plugin install 会装到不同位置， 两个都装会导致每个 skill 被装两遍 。你走手动复制这条路，就别再用命令装了。 skill 装多不等于更好 每个自动触发型 skill 的 description 都会常驻在 AI 的上下文里， 装太多会稀释注意力 ——skill 自己的文档里管这叫 context load。宁可只装那 9 个，用熟了再加。 安全性 这批 skill 全部是 Markdown 说明文档， 不含可执行程序 。唯一一个脚本文件是 diagnosing-bugs/scripts/hitl-loop.template.sh （一个人工排查循环的模板），不装它也不影响主功能。仓库根目录 scripts/ 下那几个 .mjs / .sh 是翻译维护用的，跟 skill 无关，不需要复制。 万一装出问题 直接删掉对应文件夹即可。没有任何注册表改动、没有卸载残留。 本指南基于仓库 main 分支的实际文件内容整理（含 README.md、CONTEXT.md 及各 skill 的 SKILL.md / CONTEXT-FORMAT.md）。</p>
+<h2 class="section" id="part-4">第 4 部分 · 29 个 Skills 分层与已装状态对照表</h2>
+<p style="color: var(--text-muted); font-size: 14px;">源文件：<code>MattPocock_Skills_29个分层与已装状态.html</code></p>
+<div class="callout">
+<div class="icon">📄 源格式说明</div>该源文件为 HTML 格式（5904 字符）。下面是提取后的纯文本内容；如需查看带样式的原版 HTML，请直接打开源文件 <code>MattPocock_Skills_29个分层与已装状态.html</code>。
+</div>
+<p>Matt Pocock Skills 中文版 29 个 skill 按是否适合非编程用户分层 29 个正式 skill 分为三层：13 个领域无关可直接用、6 个有 GitHub 能用但偏重、10 个明确需要代码仓库用不了；另有 6 个半成品。实心圆点表示已安装到本机。 29 个 skill 分层：对不写代码的你 实心点 = 你本机已安装 · 空心点 = 未装 A · 直接用 13 B · 偏重 6 C · 用不了 10 A · 领域无关 不写代码也能用 grill-me grilling research handoff wait-what writing-for-agents domain-modeling grill-with-docs teach wayfinder prototype to-questionnaire B · 有 GitHub 能用 偏重，或需取舍 to-spec to-tickets triage setup-matt-pocock wizard diagnosing-bugs C · 明确用不了 要读代码 / 跑测试 / 动 git tdd code-review implement codebase-design improve-codebase resolving-merge git-guardrails migrate-to-shoehorn scaffold-exercises setup-pre-commit</p>
+<div class="summary-card">
+<h2>📚 课题总结 · MattPocock Skills 使用速查</h2>
+
+<p>本课题覆盖 4 份源文件，聚焦 MattPocock 公开的 29 个 AI 提示词技能包，可结论如下：</p>
+
+<div class="item">29 个 Skills 按「必备 → 推荐 → 可选」三层组织，必备层即可覆盖大部分日常工作流（PR 审查、错误诊断、代码重构、类型推导等）。</div>
+<div class="item">安装方式简单：从官方 GitHub 仓库下载 SKILL.md 文件放入 AI IDE 的 skill 目录即可，无需任何运行时依赖。</div>
+<div class="item">兼容所有支持 Skill 协议的 AI IDE：Trae / Cursor / Claude Code / Cline / Continue 等。</div>
+<div class="item">选型原则：先装必备层验证工作流匹配度，再按需扩展；避免一次性全装导致触发条件互相干扰。</div>
+<div class="item">用户已装状态显示已覆盖主要场景，剩余未装 Skills 均为低频辅助类（如特定框架的细节调优）。</div>
+
+<p style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-soft); font-size: 14px;">
+如需查看每个 Skill 的完整 YAML 描述与触发条件，请直接访问 Matt Pocock 的官方仓库。
+</p>
+</div>
+  </div>
+</div>
+<div class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+<script>
+  // Back to top button visibility
+  const btn = document.querySelector('.back-top');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) btn.classList.add('show');
+    else btn.classList.remove('show');
+  });
+  // Active sidebar link tracking
+  const links = document.querySelectorAll('.sidebar nav a');
+  const sections = [];
+  document.querySelectorAll('h2.section, h3.subsection').forEach(h => {
+    if (h.id) sections.push({id: h.id, top: h.offsetTop});
+  });
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY + 100;
+    let active = sections[0]?.id;
+    for (const s of sections) {
+      if (s.top <= y) active = s.id;
+    }
+    if (active) {
+      links.forEach(l => {
+        if (l.getAttribute('href') === '#' + active) l.style.background = 'var(--accent-soft)';
+        else l.style.background = '';
+      });
+    }
+  });
+</script>
+</body>
+</html>
